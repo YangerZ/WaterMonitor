@@ -1,0 +1,65 @@
+﻿@model IEnumerable<AdminLTE.StationTab>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>站点信息</h2>
+
+<p>
+    @Html.ActionLink("添加", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.rtu_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.rtu_region)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sta_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SIM)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.rtu_type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.rtu_unit)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.rtu_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.rtu_region)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sta_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SIM)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.rtu_type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.rtu_unit)
+        </td>
+        <td>
+            @Html.ActionLink("编辑", "Edit", new { id=item.rtu_id.Trim() }) |
+            @Html.ActionLink("数据", "Details", new { id=item.rtu_id.Trim() }) |
+            @Html.ActionLink("删除", "Delete", new { id=item.rtu_id.Trim() })
+           
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TempModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--生成过程中发现错误:
+警告 6002: 表/视图“temp.dbo.DataTab”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+  <EntityType Name="DataTab">
+    <Key>
+      <PropertyRef Name="rtu_id" />
+    </Key>
+    <Property Name="rtu_id" Type="nchar" MaxLength="20" Nullable="false" />
+    <Property Name="rtu_time" Type="smalldatetime" />
+    <Property Name="water_level" Type="nchar" MaxLength="10" />
+    <Property Name="water_flow" Type="nchar" MaxLength="10" />
+    <Property Name="water_pressure" Type="nchar" MaxLength="10" />
+    <Property Name="water_tem" Type="nchar" MaxLength="10" />
+    <Property Name="water_ph" Type="nchar" MaxLength="10" />
+    <Property Name="water_turb" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="StationTab">
+    <Key>
+      <PropertyRef Name="rtu_id" />
+    </Key>
+    <Property Name="rtu_id" Type="nchar" MaxLength="20" Nullable="false" />
+    <Property Name="rtu_name" Type="nvarchar" MaxLength="50" />
+    <Property Name="rtu_region" Type="nvarchar" MaxLength="50" />
+    <Property Name="sta_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="SIM" Type="nvarchar" MaxLength="50" />
+    <Property Name="rtu_type" Type="nvarchar" MaxLength="50" />
+    <Property Name="rtu_unit" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="UsersTab">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="user_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="user_password" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="user_region" Type="nvarchar" MaxLength="50" />
+    <Property Name="user_unit" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="user_tel" Type="nvarchar" MaxLength="50" />
+    <Property Name="user_mail" Type="nvarchar" MaxLength="50" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" />
+    <Property Name="user_role" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityContainer Name="TempModelStoreContainer">
+    <EntitySet Name="StationTab" EntityType="Self.StationTab" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UsersTab" EntityType="Self.UsersTab" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DataTab" EntityType="Self.DataTab" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [DataTab].[rtu_id] AS [rtu_id], 
+    [DataTab].[rtu_time] AS [rtu_time], 
+    [DataTab].[water_level] AS [water_level], 
+    [DataTab].[water_flow] AS [water_flow], 
+    [DataTab].[water_pressure] AS [water_pressure], 
+    [DataTab].[water_tem] AS [water_tem], 
+    [DataTab].[water_ph] AS [water_ph], 
+    [DataTab].[water_turb] AS [water_turb]
+    FROM [dbo].[DataTab] AS [DataTab]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>

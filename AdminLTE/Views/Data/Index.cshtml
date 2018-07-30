@@ -1,0 +1,70 @@
+﻿@model IEnumerable<AdminLTE.DataTab>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>数据信息</h2>
+
+<p>
+    @*@Html.ActionLink("Create New", "Create")*@
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.rtu_time)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.water_level)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.water_flow)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.water_pressure)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.water_tem)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.water_ph)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.water_turb)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.rtu_time)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.water_level)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.water_flow)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.water_pressure)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.water_tem)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.water_ph)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.water_turb)
+        </td>
+        @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.rtu_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.rtu_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.rtu_id })
+        </td>*@
+    </tr>
+}
+
+</table>

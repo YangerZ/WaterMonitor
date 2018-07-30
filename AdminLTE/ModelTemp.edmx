@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TempModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“temp.dbo.DataTab”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="DataTab">
+          <Key>
+            <PropertyRef Name="rtu_id" />
+          </Key>
+          <Property Name="rtu_id" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="rtu_time" Type="smalldatetime" />
+          <Property Name="water_level" Type="nchar" MaxLength="10" />
+          <Property Name="water_flow" Type="nchar" MaxLength="10" />
+          <Property Name="water_pressure" Type="nchar" MaxLength="10" />
+          <Property Name="water_tem" Type="nchar" MaxLength="10" />
+          <Property Name="water_ph" Type="nchar" MaxLength="10" />
+          <Property Name="water_turb" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="StationTab">
+          <Key>
+            <PropertyRef Name="rtu_id" />
+          </Key>
+          <Property Name="rtu_id" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="rtu_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="rtu_region" Type="nvarchar" MaxLength="50" />
+          <Property Name="sta_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SIM" Type="nvarchar" MaxLength="50" />
+          <Property Name="rtu_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="rtu_unit" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="UsersTab">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="user_password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="user_region" Type="nvarchar" MaxLength="50" />
+          <Property Name="user_unit" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="user_tel" Type="nvarchar" MaxLength="50" />
+          <Property Name="user_mail" Type="nvarchar" MaxLength="50" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+          <Property Name="user_role" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityContainer Name="TempModelStoreContainer">
+          <EntitySet Name="StationTab" EntityType="Self.StationTab" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UsersTab" EntityType="Self.UsersTab" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DataTab" EntityType="Self.DataTab" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [DataTab].[rtu_id] AS [rtu_id], 
+    [DataTab].[rtu_time] AS [rtu_time], 
+    [DataTab].[water_level] AS [water_level], 
+    [DataTab].[water_flow] AS [water_flow], 
+    [DataTab].[water_pressure] AS [water_pressure], 
+    [DataTab].[water_tem] AS [water_tem], 
+    [DataTab].[water_ph] AS [water_ph], 
+    [DataTab].[water_turb] AS [water_turb]
+    FROM [dbo].[DataTab] AS [DataTab]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TempModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="StationTab">
+          <Key>
+            <PropertyRef Name="rtu_id" />
+          </Key>
+          <Property Name="rtu_id" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="rtu_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="rtu_region" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="sta_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SIM" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="rtu_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="rtu_unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="UsersTab">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="user_password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="user_region" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="user_unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="user_tel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="user_mail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="user_role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="DataTab">
+          <Key>
+            <PropertyRef Name="rtu_id" />
+          </Key>
+          <Property Name="rtu_id" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="rtu_time" Type="DateTime" Precision="0" />
+          <Property Name="water_level" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="water_flow" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="water_pressure" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="water_tem" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="water_ph" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="water_turb" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="TempEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="StationTab" EntityType="Self.StationTab" />
+          <EntitySet Name="UsersTab" EntityType="Self.UsersTab" />
+          <EntitySet Name="DataTab" EntityType="Self.DataTab" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TempModelStoreContainer" CdmEntityContainer="TempEntities">
+          <EntitySetMapping Name="StationTab">
+            <EntityTypeMapping TypeName="TempModel.StationTab">
+              <MappingFragment StoreEntitySet="StationTab">
+                <ScalarProperty Name="rtu_id" ColumnName="rtu_id" />
+                <ScalarProperty Name="rtu_name" ColumnName="rtu_name" />
+                <ScalarProperty Name="rtu_region" ColumnName="rtu_region" />
+                <ScalarProperty Name="sta_name" ColumnName="sta_name" />
+                <ScalarProperty Name="SIM" ColumnName="SIM" />
+                <ScalarProperty Name="rtu_type" ColumnName="rtu_type" />
+                <ScalarProperty Name="rtu_unit" ColumnName="rtu_unit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UsersTab">
+            <EntityTypeMapping TypeName="TempModel.UsersTab">
+              <MappingFragment StoreEntitySet="UsersTab">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="user_name" ColumnName="user_name" />
+                <ScalarProperty Name="user_password" ColumnName="user_password" />
+                <ScalarProperty Name="user_region" ColumnName="user_region" />
+                <ScalarProperty Name="user_unit" ColumnName="user_unit" />
+                <ScalarProperty Name="user_tel" ColumnName="user_tel" />
+                <ScalarProperty Name="user_mail" ColumnName="user_mail" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="user_role" ColumnName="user_role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DataTab">
+            <EntityTypeMapping TypeName="TempModel.DataTab">
+              <MappingFragment StoreEntitySet="DataTab">
+                <ScalarProperty Name="rtu_id" ColumnName="rtu_id" />
+                <ScalarProperty Name="rtu_time" ColumnName="rtu_time" />
+                <ScalarProperty Name="water_level" ColumnName="water_level" />
+                <ScalarProperty Name="water_flow" ColumnName="water_flow" />
+                <ScalarProperty Name="water_pressure" ColumnName="water_pressure" />
+                <ScalarProperty Name="water_tem" ColumnName="water_tem" />
+                <ScalarProperty Name="water_ph" ColumnName="water_ph" />
+                <ScalarProperty Name="water_turb" ColumnName="water_turb" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
