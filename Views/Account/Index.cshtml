@@ -1,0 +1,63 @@
+﻿@*@model IEnumerable<AdminLTE.Models.SysUser>*@
+@model PagedList.IPagedList<AdminLTE.Models.SysUser>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = " ~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Html.ActionLink("UserName","Index",new { sortOrder=ViewBag.NameSortParam})</h2>
+ 
+<p class="sub-header">@Html.ActionLink("Create New","Create")</p>
+@using (Html.BeginForm("Index","Account",FormMethod.Get))
+{
+    <p>
+        搜索：@Html.TextBox("searchKey",ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search"/>
+    </p>
+}
+<table class="table  table-bordered table-responsive"  >
+    <tr>
+        <th>@Html.ActionLink("UserName","Index",new { sortOrder=ViewBag.NameSortParam, curFilter = ViewBag.CurrentFilter})</th>
+        @*<th>@Html.DisplayNameFor(model => model.UserName)</th>*@
+    
+   
+        <th>Email</th>
+        <th>Department</th>
+    </tr>
+    @foreach(var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem=>item.UserName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Email)</td>
+            <td>@Html.DisplayFor(modelItem=>item.SysDepartment.DepartmentName)</td>
+            <td>@Html.ActionLink("Details","Details",new { id=item.ID})
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID })
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            </td>
+        </tr>
+    }
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, curFilter = ViewBag.CurrentFilter }))
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        <li>
+            <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li>
+            <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+

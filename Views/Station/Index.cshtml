@@ -1,0 +1,105 @@
+﻿@model PagedList.IPagedList<AdminLTE.ViewModel.StaionInfo>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/PagedList.css" rel="stylesheet" />
+<style>
+     table   tr {
+        cursor:pointer;
+    }
+</style>
+<h2>站点信息</h2>
+ 
+<p>
+    @Html.ActionLink("添加", "Create")
+</p>
+@using (Html.BeginForm("Index","Station",@FormMethod.Get))
+{
+   <p>
+       搜索站点：@Html.TextBox("searchString",ViewBag.Filter as string)
+       <input type="submit"  value="查找" />
+   </p>
+}
+@if (Model==null)
+{
+    <h3>暂时没有符合的数据</h3>
+}
+else
+{
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(Model=>Model.GetEnumerator().Current.rtu_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.GetEnumerator().Current.rtu_region)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.GetEnumerator().Current.sta_name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.GetEnumerator().Current.SIM)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.GetEnumerator().Current.rtu_type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.GetEnumerator().Current.rtu_unit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.GetEnumerator().Current.name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.GetEnumerator().Current.user_tel)
+            </th>
+            <th>
+                数据操作
+            </th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.rtu_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.rtu_region)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.sta_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SIM)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.rtu_type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.rtu_unit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.user_tel)
+                </td>
+                <td>
+                    @Html.ActionLink("编辑", "Edit", new { id = item.rtu_id.Trim() }) |
+                    @Html.ActionLink("数据","Details", new { id = item.rtu_id.Trim() }) |
+                    @Html.ActionLink("删除", "Delete", new { id = item.rtu_id.Trim() })
+
+                </td>
+            </tr>
+        }
+
+
+
+    </table>
+    <br>
+    
+}
+
+@*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber ) of @Model.PageCount*@
+@Html.PagedListPager(Model, page => Url.Action("Index","Station" ,new { page, filter = ViewBag.Filter }))

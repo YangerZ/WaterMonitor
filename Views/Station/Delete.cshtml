@@ -1,0 +1,74 @@
+﻿@model AdminLTE.StationTab
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>删除站点</h2>
+
+<h3>是否删除该站点及其信息</h3>
+<div>
+    <h4>站点信息</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.rtu_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.rtu_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.rtu_region)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.rtu_region)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sta_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sta_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SIM)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SIM)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.rtu_type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.rtu_type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.rtu_unit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.rtu_unit)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <button type="submit" value="Delete">删除</button>
+            @*<input type="submit" value="Delete" class="btn btn-default" /> |*@
+            @Html.ActionLink("返回列表", "Index")
+        </div>
+    }
+</div>

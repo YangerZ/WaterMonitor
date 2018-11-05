@@ -1,0 +1,306 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .devicelist {
+        max-height:400px;
+        overflow:auto;
+    }
+    .devicelist > a{
+        border-width: 1px 0;
+    border-radius: 0;
+
+    }
+     .devicelist > a:hover{
+       cursor:pointer;
+       background-color:#337ab7;
+
+    }
+    .comspan > span > button{
+        margin-bottom:10px;
+    }
+    .panel-top-line {
+       border-top: 4px solid #337ab7;
+    }
+    .panel {
+      border:none;
+    }
+    .deviceinfo > div{
+        margin-bottom:10px;
+    }
+    .deviceinfo > div > div >span{
+         text-align:center;
+         color:#337ab7;
+         
+         margin-left:10px;
+    }
+</style>
+
+
+<div class="container-fluid">
+    <div class="col-md-5" >
+        <div class="panel">
+            <div class="panel-heading  panel-top-line" style="padding-bottom:0px;padding-top:20px;">
+                <h4>设备列表</h4>
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="devicelist">快速查找</label>
+                        <input type="text" name="devicekey" class="form-control" style="width:240px;height:30px;" id="devicelist" placeholder="输入关键字">
+                    </div>
+                     
+                    <button type="button" class="btn btn-default" style="width:60px;padding:4px 12px;" onclick="DeviceList()">搜索</button>
+                </form>
+            </div>
+            <div class="panel-body">
+                <div class="list-group devicelist">
+                   
+                </div>
+            </div>
+        </div>
+       
+    </div>
+    <div class="col-md-7">
+        <div class="panel">
+            <div class="panel-heading panel-top-line">
+                 <div class="panel-title">设备基本信息</div>
+            </div>
+            <div class="panel-body deviceinfo">
+                <div class="col-md-6">
+                    <div>设备编号: <span class="rtu_id"></span></div>
+                </div>
+                <div class="col-md-6">
+                    <div>设备名称:<span class="rtu_name"></span></div>
+                </div>
+                <div class="col-md-6">
+                    <div>安装地点:<span class="rtu_region"></span></div>
+                </div>
+                <div class="col-md-6">
+                    <div>监测点名称:<span class="sta_name"></span></div>
+                </div>
+                <div class="col-md-6">
+                    <div>SIM卡号:<span class="SIM"></span></div>
+                </div>
+                <div class="col-md-6">
+                    <div>传感器类型:<span class="rtu_type"></span></div>
+                </div>
+                <div class="col-md-6">
+                    <div>安装单位:<span class="rtu_unit"></span></div>
+                </div>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-heading panel-top-line">
+                <div class="panel-title">常用命令</div>
+                <div class="progress" style="margin:0px;margin-top:10px;">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                        <span class="sr-only">Complete</span>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body comspan">
+                 <span class="col-md-3">
+                     <button class="btn btn-primary dataquery" data-toggle="modal" data-target="#myModal" onclick="Send('1')">实时水位查询</button>
+                 </span>
+                <span class="col-md-3">
+                    <button class="btn btn-primary dataquery" data-toggle="modal" data-target="#myModal" onclick="Send('2')">实时水量查询</button>
+                </span>
+                <span class="col-md-3">
+                    <button class="btn btn-primary dataquery" data-toggle="modal" data-target="#myModal" disabled="disabled">实时数据查询</button>
+                </span>
+                <span class="col-md-3">
+                    <button class="btn btn-primary dataquery" data-toggle="modal" data-target="#myModal" disabled="disabled">实时数据查询</button>
+                </span>
+                <span class="col-md-3">
+                    <button class="btn btn-primary dataquery" data-toggle="modal" data-target="#myModal" disabled="disabled">实时数据查询</button>
+                </span>
+                <span class="col-md-3"></span>
+                <span class="col-md-3"></span>
+                <span class="col-md-3"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">实时信息</h4>
+            </div>
+            <div class="modal-body row">
+                <div class="col-md-10"><div>时间: <span class="time"></span></div></div>
+                <div class="col-md-10"><div>水流: <span class="level"></span></div></div>
+                <div class="col-md-10"><div>水位: <span class="flow"></span></div></div>
+                <div class="col-md-10"><div>酸碱度: <span class="pressure"></span></div></div>
+                <div class="col-md-10"><div>压力: <span class="tem"></span></div></div>
+                <div class="col-md-10"><div>温度: <span class="ph"></span></div></div>
+                <div class="col-md-10"><div>浊度: <span class="turb"></span></div></div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                 
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    /*
+    *初始设备列表
+    */
+    $(function () {
+        DeviceList();
+       
+    })
+    function DeviceList() {
+        $('.devicelist').empty();
+        $.ajax({
+            url: 'DeviceList',
+            type: 'Get',
+            data: { searchkey:$('#devicelist').val()}, 
+            success: function (data) {
+                console.log(data);
+                if (data == null || data == undefined) {
+                    return;
+                }
+                var resultdata = GetData(data);
+                BindDataToDeviceListDom(resultdata);
+                
+            },
+            error: function (XMLHttpRequest, textStatus, error) {
+                alert(textStatus);
+            }
+        })
+    }
+    function GetData(data)
+    {
+        result = [];
+        for (var i = 0; i < data.length; i++) {
+            var value_ = "";
+            var time_ = "";
+            var data_ = data[i];
+            data_['rtu_id'] = $.trim(data_['rtu_id']);
+            result.push(data_);
+            
+        }
+        return result;
+    }
+    //记录当前选定设备ID号
+    var selectedID = '';
+    function BindDataToDeviceListDom(data)
+    {
+        for (var i = 0; i < data.length; i++) {
+            var data_ = data[i];
+            var id = data_['rtu_id'];
+            var name = data_['rtu_name'];
+            var item = '<a class="list-group-item" data-id="' + id + '" >' + name + '</a>'
+            $('.devicelist').append(item);
+        }
+        //点击设备列表显示对应信息
+        $('.devicelist').on('click', 'a', function () {
+            var a = $(event.target);
+            var selectid = $(a).attr('data-id');
+            selectedID = selectid;
+            DeviceInfo(selectid);
+        });
+    }
+    //请求设备信息
+    function DeviceInfo(id) {
+        $('.deviceinfo').find('span').each(function (index,obj) {
+            $(obj).text('');
+        });
+        $.ajax({
+            url: 'DeviceInfo',
+            type: 'Get',
+            data: { deviceid:id },
+            success: function (data) {
+                console.log(data);
+                if (data == null || data == undefined) {
+                    return;
+                }
+                for (field in data) {
+                    var value_ = data[field];
+                    var spanele = $('.deviceinfo').find('span.' + field);
+                    $(spanele).text(value_);
+                }
+                
+            },
+            error: function (XMLHttpRequest, textStatus, error) {
+                alert(textStatus);
+            }
+        })
+    }
+    //按照水位 水量等类型请求实时数据
+    var handler=null;
+    function Send(type)
+    {
+        if (selectedID == '' || selectedID == undefined)
+        {
+            alert('没有选择设备')
+            return;
+        }
+        $('#myModal').show(false);
+         
+        var width = 0;
+        handler=setInterval(function () {
+            width +=30;
+            $('.progress-bar').width(width+"%");
+        }, 500)
+        
+        $.ajax({
+            url: 'DeviceRealTime',
+            type: 'Get',
+            data: { stu_id: selectedID, stu_type: type },
+            success: function (data) {
+                $('.sr-only').width(100);
+                console.log(data);
+                var time = data.rtu_time;
+                var date3 = eval(time.replace(/\/Date\((\d+)\)\//gi, "new Date($1)"));
+                t=generalTimeObj('-', date3)
+                console.log(date3);
+                $('#myModal').find('.time').text(t);
+                $('#myModal').find('.level').text(data.water_level);
+                clearTimeout(handler);
+                $('.progress-bar').width('100%');
+               
+
+            },
+            error: function (XMLHttpRequest, textStatus, error) {
+                alert(textStatus);
+            }
+        })
+    }
+    $('#myModal').on('hidden.bs.modal', function (e) {
+        //alert('out');
+        $('.progress-bar').width('0');
+    })
+    function generalTimeObj(splitchar, stamp) {
+
+        var formatstr = "";
+        var t = new Date(stamp);
+        var year = t.getFullYear();
+        var month = t.getMonth() + 1;
+        var day = t.getDate();
+        var hour = t.getHours();
+        var minutes = t.getMinutes();
+        var seconds = t.getSeconds();
+        if (month < 10) {
+            month = '0' + month;
+        }
+        if (day < 10) {
+            day = '0' + day;
+        }
+        var time = hour + ":" + minutes + ":" + seconds;
+        if (splitchar == null) {
+            formatstr = year + month + day + " " + time;
+        }
+        else {
+            formatstr = year + splitchar + month + splitchar + day + " " + time;
+        }
+        //tObj.stamp = t.getTime();
+        return formatstr;
+    }
+</script>
