@@ -1,0 +1,97 @@
+﻿@model PagedList.IPagedList<AdminLTE.ViewModel.InstruInfo>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    table tr {
+        cursor: pointer;
+    }
+</style>
+<h2>设备列表</h2>
+
+<p>
+    @Html.ActionLink("添加设备", "Create")
+</p>
+@using (Html.BeginForm("Index", "Instrument", @FormMethod.Get))
+{
+    <p>
+        搜索设备名称：@Html.TextBox("searchString", ViewBag.Filter as string)
+        <input type="submit" value="查找" />
+    </p>
+}
+@if (Model == null)
+{
+    <h3>没有站点下的仪器设备</h3>
+}
+else
+{
+    <table class="table table table-striped table-bordered">
+        <tr>
+           
+            <th>
+                @Html.DisplayNameFor(model => model.GetEnumerator().Current.instru_name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GetEnumerator().Current.rtu_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GetEnumerator().Current.instru_state)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GetEnumerator().Current.other)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.GetEnumerator().Current.instru_time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GetEnumerator().Current.instru_value)
+            </th>
+            
+
+            <th>数据操作</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.instru_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.rtu_id)
+                </td>
+                @if (item.instru_state == null)
+                {
+                    <td style="color:red">离线</td>
+                }
+                 @if (item.instru_state == "0")
+                 {
+                    <td style="color:red">离线</td>
+                 }
+                 @if (item.instru_state == "1")
+                 {
+                    <td style="color:green">在线</td>
+                 }
+                <td> @Html.DisplayFor(modelItem => item.other)</td>
+                <td> @Html.DisplayFor(modelItem => item.instru_time)</td>
+                <td> @Html.DisplayFor(modelItem => item.instru_value)</td>
+                <td>
+                    @Html.ActionLink("编辑", "Edit", new { id = item.id }) |
+                    @Html.ActionLink("数据", "Index","Data", new { instru_name=item.instru_name},new { @class="my"})|
+                    @Html.ActionLink("删除", "Delete", new { id = item.id })
+                </td>
+            </tr>
+        }
+
+    </table>
+    @Html.PagedListPager(Model, page => Url.Action("Index", "Instrument", new { page, filter = ViewBag.Filter ,rtu_id=ViewBag.rtu_id}))
+}
+<div>
+    @Html.ActionLink("返回站点", "Index","Rtu",null,null)
+</div>
+
+

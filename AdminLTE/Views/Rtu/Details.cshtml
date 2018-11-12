@@ -1,0 +1,509 @@
+﻿@model PagedList.IPagedList<AdminLTE.rtu>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>数据信息</h2>
+<script src="~/Content/js/plugins/echart/echarts.common.min.js"></script>
+<link href="~/Content/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<script src="~/Content/js/plugins/jquery/jquery-3.3.1.min.js"></script>
+<script src="~/Content/js/plugins/datepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Content/js/plugins/datepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<!-- Nav tabs -->
+@*<link href="~/Content/css/bootstrap-select.min.css" rel="stylesheet" />
+    <script src="~/Content/js/plugins/bootstrap-select/bootstrap-select.min.js"></script>*@
+<style>
+    .div1 {
+        padding-left: 10px;
+        padding-right: 10px;
+        line-height: 22px;
+        font-size: 16px;
+    }
+
+    .input_con1 {
+        width: 100px;
+        text-align: center;
+        border-radius: 2px;
+    }
+
+    .selectpicker {
+        padding: 4px 14px;
+    }
+
+    .chartdiv {
+        min-height: 400px;
+        width: 100%;
+    }
+
+    .nav-pills > li > a {
+        padding: 6px 14px;
+    }
+
+    table tr {
+        cursor: pointer;
+    }
+</style>
+<ul class="nav nav-tabs nav-pills" role="tablist">
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">表格显示</a></li>
+    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab" onclick="InitChart()">图表显示</a></li>
+</ul>
+<!-- Tab panes -->
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="home">
+
+        @using (Html.BeginForm("Index", "Data", @FormMethod.Post))
+        {
+            <p class="form-inline">
+
+                <div class="inline div1">
+                    起始时间：
+                    <input size="10" name="t1_s" type="text" value="2018-04-25" class="t1_s input_con1" />
+                    &nbsp;&nbsp;结束时间：
+                    <input size="10" name="t1_e" type="text" value="2018-09-25" class="t1_e input_con1" />
+
+                </div>
+                <button class="btn btn-primary" style="padding: 4px 12px;" type="submit">搜索</button>
+            </p>
+        }
+        @if (Model == null)
+        {
+            <h3>暂时没有符合的数据</h3>
+        }
+        else
+        {
+            <table class="table table-striped table-bordered">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.GetEnumerator().Current.rtu_time)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.GetEnumerator().Current.water_level)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.GetEnumerator().Current.water_flow)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.GetEnumerator().Current.water_pressure)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.GetEnumerator().Current.water_tem)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.GetEnumerator().Current.water_ph)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.GetEnumerator().Current.water_turb)
+                    </th>
+
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.rtu_time)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.water_level)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.water_flow)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.water_pressure)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.water_tem)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.water_ph)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.water_turb)
+                        </td>
+                        @*<td>
+                                @Html.ActionLink("Edit", "Edit", new { id=item.rtu_id }) |
+                                @Html.ActionLink("Details", "Details", new { id=item.rtu_id }) |
+                                @Html.ActionLink("Delete", "Delete", new { id=item.rtu_id })
+                            </td>*@
+                    </tr>
+                }
+
+            </table>
+        }
+
+        @*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber ) of @Model.PageCount*@
+        @Html.PagedListPager(Model, page => Url.Action("Index", "Station", new { page, filter1 = ViewBag.stime, filter2 = ViewBag.etime }))
+
+
+    </div>
+    <div role="tabpanel" class="tab-pane" id="profile">
+
+        <form name="query" id="query">
+            <p class="form-inline">
+                <div class="inline">
+                    数据查询：
+                    <label for="type_id">监测类型</label>:
+
+                    <select name="sel_type" class="selectpicker">
+                        <option selected="selected" value="water_level">水位</option>
+                        <option value="water_flow">流量</option>
+                        <option value="water_pressure">压力</option>
+                        <option value="water_tem">温度</option>
+                        <option value="water_ph">PH值</option>
+                        <option value="water_turb">浊度</option>
+                    </select>
+                </div>
+
+
+                <div class="inline div1">
+                    &nbsp;起始时间：
+                    <input size="10" type="text" name="t2_s" value="2018-04-25" readonly class="t2_s input_con1" />
+                    &nbsp;&nbsp;结束时间：
+                    <input size="10" type="text" name="t2_e" value="2018-09-25" readonly class="t2_e input_con1" />
+                </div>
+                <button class="btn btn-primary" style="padding: 4px 12px;" type="button" onclick="query_chart()">搜索</button>
+            </p>
+        </form>
+        <div id="chart" class="chartdiv">
+
+        </div>
+
+
+
+    </div>
+
+</div>
+<div>
+    @Html.ActionLink("返回站点列表", "Index", "Station")
+</div>
+
+<script>
+    //$('.selectpicker').selectpicker();
+    $(document).ready(
+        function () {
+            $('.t1_s').datetimepicker({
+                language: 'zh-CN',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                format: 'yyyy-MM-dd',
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0
+            });
+            $('.t1_e').datetimepicker({
+                language: 'zh-CN',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                format: 'yyyy-MM-dd',
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0
+            });
+            $('.t2_s').datetimepicker({
+                language: 'zh-CN',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                format: 'yyyy-MM-dd',
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0
+            });
+            $('.t2_e').datetimepicker({
+                language: 'zh-CN',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                format: 'yyyy-MM-dd',
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0
+            });
+
+        });
+
+    function generalTimeObj(splitchar,stamp) {
+
+        var formatstr = "";
+        var t = new Date(stamp);
+        var year = t.getFullYear();
+        var month = t.getMonth() + 1;
+        var day = t.getDate();
+        var hour = t.getHours();
+        var minutes = t.getMinutes();
+        var seconds = t.getSeconds();
+        if (month < 10) {
+            month = '0' + month;
+        }
+        if (day < 10) {
+            day = '0' + day;
+        }
+        var time = hour + ":" + minutes + ":" + seconds;
+        if (splitchar == null) {
+            formatstr = year + month + day + " " + time;
+        }
+        else {
+            formatstr = year + splitchar + month + splitchar + day + " " + time;
+        }
+        //tObj.stamp = t.getTime();
+        return formatstr;
+    }
+    function InitChart() {
+        var type = $('.selectpicker').val();
+        $.ajax({
+            url: 'Chart',
+            type: 'Get',
+            data: $('#query').serialize(),
+            success: function (data) {
+                console.log(data);
+                if (data == null || data == undefined) {
+                    return;
+                }
+                var x_times = [];
+                var y_values = [];
+                for (var i = 0; i < data.length; i++) {
+                    var value_ = "";
+                    var time_ = "";
+                    var data_ = data[i];
+                    value_ = data_[type];
+                    value_ = $.trim(value_);
+                    time_=data_["rtu_time"];
+                    time_ = time_.replace(/[^0-9]/ig, "");
+                    time_ = generalTimeObj('-', parseInt(time_));
+                    y_values.push(value_);
+                    x_times.push(time_);
+                }
+
+                show_table('水位值变化曲线图', ['水位值'], x_times, '水位值(单位：m)', '水位值', y_values, '#3399FF')
+            },
+            error: function (XMLHttpRequest, textStatus, error) {
+                alert(textStatus);
+            }
+        })
+    }
+
+    //var chart = null;
+    //chart = echarts.init(document.getElementById("chart"), null, { renderer: 'canvas', width: 'auto', height: 'auto' });
+    //window.onresize = function () {
+    //    if(chart!=null){
+    //        chart.resize({
+    //            width: "auto"
+    //        });
+    //    }
+    //}
+
+
+
+    function query_chart() {
+
+        var type = $('.selectpicker').val();
+        $.ajax({
+            url: 'Chart',
+            type: 'Get',
+            data: $('#query').serialize(),
+            success: function (data) {
+                if (data == null || data == undefined) {
+                    return;
+                }
+                var x_times = [];
+                var y_values = [];
+                for (var i = 0; i < data.length; i++) {
+                    var value_ = "";
+                    var time_ = "";
+                    var data_ = data[i];
+                    value_ = data_[type];
+                    value_ = $.trim(value_);
+                    time_ = data_["rtu_time"];
+                    time_ = time_.replace(/[^0-9]/ig, "");
+                    time_ = generalTimeObj('-', parseInt(time_));
+                    y_values.push(value_);
+                    x_times.push(time_);
+                }
+                switch (type) {
+                    case 'water_level':
+                        show_table('水位值变化曲线图', ['水位值'], x_times, '水位值(单位：m)', '水位值', y_values, '#3399FF')
+                        break;
+                    case 'water_flow':
+                        show_table('流量变化曲线图', ['流量'], x_times, '流量值(单位：mg/L)', '流量值', y_values, '#006600')
+                        break;
+                    case 'water_pressure':
+                        show_table('压力变化曲线图', ['压力'], x_times, '压力值(单位：pa/m)', '压力值', y_values, '#9900FF')
+                        break;
+                    case 'water_ph':
+                        show_table('PH变化曲线图', ['PH值'], x_times, 'PH值', 'PH值', y_values, '#CC9933')
+                        break;
+                    case 'water_turb':
+                        show_table('浊度变化曲线图', ['浊度值'], x_times, '浊度值(单位：NTU)', '浊度值', y_values, '#666633')
+                        break;
+                    case 'water_tem':
+                        show_table('水温变化曲线图', ['水温值'], x_times, '水温值(单位：℃)', '水温值', y_values, '#003399')
+                        break;
+                    //case 'Conductance':
+                    //    show_table('电导率变化曲线图', ['电导率值'], date, '电导率值(单位：mS/m)', '电导率值', data, '#990033')
+                    //    break;
+                    //case 'Dissolved':
+                    //    show_table('溶解氧变化曲线图', ['溶解氧值'], date, '溶解氧值', '溶解氧值', data, '#9900FF')
+                    //    break;
+                    //case 'COD':
+                    //    show_table('COD变化曲线图', ['COD值'], date, 'COD值(单位：mg/L)', 'COD值', data, '#006600')
+                    //    break;
+                    default:
+                        alert("发生未知错误或者无此图表，请刷新页面。")
+                }
+            },
+            error: function (result) {
+                console.log(result);
+            }
+        });
+    }
+
+
+    function show_table(text, legend_name, x_data, yAxis_name, series_name, series_data, color) {
+        var myChart = echarts.init(document.getElementById("chart"), null, { renderer: 'canvas', width: 'auto', height: 'auto' });
+        var option = {
+            baseOption: {
+                title: {
+                    text: text,
+                    subtext: '',
+                    x: 'center',
+                    align: 'right'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        animation: true,
+                        type: 'cross'
+                    },
+                },
+                grid: {
+                    x: 50,
+                    x2: 50,
+                    y2: 30
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        dataView: { readOnly: false },
+                        magicType: { type: ['line', 'bar'] },
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                legend: {
+                    data: legend_name,//必须放数组里
+                    x: 'left',
+                    textStyle: {    //图例文字的样式
+                        color: color
+                    },
+                },
+                dataZoom: [
+
+                    {
+                        type: 'inside',
+                        xAxisIndex: [0],
+                        start: 1,
+                        end: 75
+                    },
+                ],
+                xAxis: [
+                    {
+                        name: '时间',
+                        type: 'category',
+
+                        data: x_data
+                    }
+                ],
+                yAxis: [
+                    {
+                        name: yAxis_name,
+                        type: 'value',
+
+                    }
+                ],
+                series: [
+                    {
+                        name: series_name,
+                        type: 'line',
+                        hoverAnimation: true,
+                        // symbol: 'none',
+                        itemStyle: {
+                            normal: {
+                                lineStyle: {
+                                    width: 2,
+                                    color: color
+                                },
+                                label: {
+                                    show: true,
+                                    position: 'top',
+                                    textStyle: {
+                                        color: color
+                                    }
+                                }
+                                // formatter: '{c} %'
+                            }
+                        },
+                        smooth: true,
+                        data: series_data
+                    }
+                ],
+                color: [color]
+            },
+            media: [
+                {
+                    query: { minWidth: 768 },
+                    option: {
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                dataZoom: {
+                                    yAxisIndex: 'none'
+                                },
+                                dataView: { readOnly: false },
+                                magicType: { type: ['line', 'bar'] },
+                                restore: {},
+                                saveAsImage: {}
+                            },
+                            orient: 'horizontal'
+                        }
+                    }
+                },
+                {
+                    query: { maxWidth: 768 },
+                    option: {
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                dataZoom: {
+                                    yAxisIndex: 'none'
+                                },
+                                dataView: { readOnly: false },
+                                magicType: { type: ['line', 'bar'] },
+                                restore: {},
+                                saveAsImage: {}
+                            },
+                            orient: 'vertical'
+                        }
+                    }
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+        window.onresize = myChart.resize;
+    }
+</script>
+
+
+

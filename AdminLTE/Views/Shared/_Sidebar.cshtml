@@ -1,0 +1,53 @@
+﻿@using WebHelpers.Mvc5
+<aside class="main-sidebar">
+    <section class="sidebar">
+        @* BEGIN Search *@
+        <form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="搜索">
+                <span class="input-group-btn">
+                    <button type="submit" name="search" id="search-btn" class="btn btn-flat">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </form>
+        @* END Search *@
+        @* BEGIN Menu *@
+        
+            <ul class="sidebar-menu" data-widget="tree">
+                <li class="header">系统维护</li>
+                <li>
+                    @*class="@Url.IsLinkActive("Index", "Station")"*@
+                    <a href="@Url.Action("Index", "Rtu")"><i class="fa fa-link"></i> <span>站点信息</span></a>
+                </li>
+                <li>
+                    @*class="@Url.IsLinkActive("Index", "Data")"*@
+                    <a href="@Url.Action("Index", "Instrument",new { rtu_id=""})"><i class="fa fa-link"></i> <span>设备信息</span></a>
+                </li>
+                <li>
+                    @*class="@Url.IsLinkActive("Index", "Data")"*@
+                    <a href="@Url.Action("Index", "Command")"><i class="fa fa-link"></i> <span>远程命令</span></a>
+                </li>
+@if (ViewBag.role == "admin")
+{
+    <li class="treeview">
+        <a href="#">
+            <i class="fa fa-link"></i> <span>系统维护</span>
+            <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="@Url.Action("Index", "User")"><i class="fa fa-link"></i> <span>用户信息</span></a>></li>
+            @*<li><a href="@Url.Action("Index", "SysAdmin")"><i class="fa fa-link"></i> <span>管理员</span></a></li>*@
+        </ul>
+    </li>
+}
+               
+            </ul>
+        
+
+        @* END Menu *@
+    </section>
+</aside>

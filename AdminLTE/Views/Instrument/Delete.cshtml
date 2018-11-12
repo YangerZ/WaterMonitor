@@ -1,0 +1,49 @@
+﻿@model AdminLTE.instrument
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>删除设备</h2>
+
+<h3>是否确认删除该设备及其信息？</h3>
+<div>
+    <h4>设备信息</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        
+
+        <dd>
+            @Html.DisplayFor(model => model.instru_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.rtu_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.other)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.instru_state)
+        </dt>
+
+        
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <button type="submit" value="Delete">删除</button>
+            @*<input type="submit" value="Delete" class="btn btn-default" /> |*@
+            @Html.ActionLink("返回列表", "Index")
+        </div>
+    }
+</div>
+
+

@@ -1,0 +1,42 @@
+﻿@model AdminLTE.Models.SysUser
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+<div class="form-group">
+    @Html.LabelFor(model => model.SysDepartmentID, "SysDepartmentID", new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownList("SysDepartmentID", String.Empty)
+        @Html.ValidationMessageFor(model => model.SysDepartmentID)
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <table>
+            <tr>
+                @{ 
+                    int trbreak = 0;
+                    List<AdminLTE.ViewModels.AssignedRoleData> roles = ViewBag.Roles;
+                    foreach (var role in roles)
+                    {
+                        if (trbreak++ % 3 == 0)
+                        {
+                            @:<tr></tr>
+                        }
+                        @:<td>
+                          <input type="checkbox"
+                                 name="slectedRoles"
+                                 value="@role.RoleId"
+                                 @(Html.Raw(role.Assigned?"checked\"checked\"":"")) 
+                                  />
+                                  @role.RoleId@: @role.RoleName           
+                        @: </td>
+                    }
+            @: </tr>
+            }
+        </table>
+    </div>
+</div>
+
